@@ -20,7 +20,8 @@ function multiplyMatrices(m1, m2)
   for j = 1, m1ColumnSize do
    local sum = 0
 
-   for k = 1, m1ColumnSize do
+   -- m1RowSize is the same as m2ColumnSize so either can be used
+   for k = 1, m1RowSize do
     sum += m1[i][k] * m2[k][j]
    end
 
@@ -31,6 +32,7 @@ function multiplyMatrices(m1, m2)
  return matrix
 end
 
+
 -- @desc for a given matrix, get the number or rows and columns
 -- @params m (Matrix) 
 -- @return number - the number of rows in the matrix, number - the number of columns in the matrix
@@ -40,6 +42,7 @@ function getMatrixSize(m)
 
  return rows, columns
 end
+
 
 -- @desc for a given row size and column size, create an empty matrix
 -- @params rowSize (number) - number of rows, columnSize (number) - number of columns
