@@ -14,22 +14,49 @@ function _init()
 
  -- ***
 
- m1 = create_empty_matrix(1, 3)
- m1[1][1] = 1
- m1[1][2] = 2
- m1[1][3] = 3
+ -- m1 = create_empty_matrix(1, 3)
+ -- m1[1][1] = 1
+ -- m1[1][2] = 2
+ -- m1[1][3] = 3
+
+ -- print_matrix(m1)
+
+ -- -- identity matrix
+ -- m2 = create_empty_matrix(3, 3)
+ -- m2[1][1] = 1
+ -- m2[2][2] = 1
+ -- m2[3][3] = 1
+ 
+ -- print_matrix(m2)
+
+ -- m3 = multiply_matrices(m1, m2)
+ 
+ -- print_matrix(m3)
+
+ -- ***
+
+ m1 = create_empty_matrix(2, 2)
+ m1[1][1] = -1
+ m1[1][2] = 4
+ m1[2][1] = 2
+ m1[2][2] = 3
 
  print_matrix(m1)
 
- -- identity matrix
- m2 = create_empty_matrix(3, 3)
- m2[1][1] = 1
+ m2 = create_empty_matrix(2, 2)
+ m2[1][1] = 9
+ m2[1][2] = -3
+ m2[2][1] = 6
  m2[2][2] = 1
- m2[3][3] = 1
  
  print_matrix(m2)
 
  m3 = multiply_matrices(m1, m2)
  
+ -- should be 
+ -- {
+ --  {15, 7},
+ --  {36, -3}
+ -- }
  print_matrix(m3)
 end

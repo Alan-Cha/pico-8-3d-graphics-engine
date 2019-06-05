@@ -12,7 +12,15 @@ function print_matrix(m)
    line = line..m[i][j]..', '
   end
   
-  print(sub(line, 1, #line - 2)..'}')
+  -- remove `, `
+  line = sub(line, 1, #line - 2)
+
+  -- trailing comma
+  if (i == #m) then
+   print(line..'}')
+  else
+   print(line..'},')
+  end
  end
 
  -- closing bracket
