@@ -12,21 +12,22 @@ function multiply_matrices(m1, m2)
 
  -- TODO: removable
  -- error check
- if (m1_row_size != m2_column_size) error("Matrix sizes do not match")
+ if (m1_column_size != m2_row_size) error("Matrix sizes do not match")
 
  -- create the matrix that will be returned in the end
- local matrix = create_empty_matrix(m2_row_size, m1_column_size)
+ local matrix = create_empty_matrix(m1_row_size, m2_column_size)
 
- for i = 1, m2_row_size do
-  for j = 1, m1_column_size do
+ -- cycle index of new matrix
+ for m1_row_index = 1, m1_row_size do
+  for m2_column_index = 1, m2_column_size do
    local sum = 0
 
    -- m1_row_size is the same as m2_column_size so either can be used
-   for k = 1, m1_row_size do
-    sum += m1[i][k] * m2[k][j]
+   for row_column_index = 1, m1_column_size do
+    sum += m1[m1_row_index][row_column_index] * m2[row_column_index][m2_column_index]
    end
 
-   matrix[i][j] = sum
+   matrix[m1_row_index][m2_column_index] = sum
   end
  end
 
