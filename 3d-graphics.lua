@@ -2,7 +2,8 @@
 -- Matrix - nested tables such that the inner tables are all the same size
 
 -- @desc multiply two matrices and return the resulting matrix
--- @params m1 (Matrix), m2 (Matrix)
+-- @params Matrix m1
+-- @params Matrix m2
 -- @return Matrix
 function multiplyMatrices(m1, m2) 
  -- get dimensions of the two matrices
@@ -34,8 +35,9 @@ end
 
 
 -- @desc for a given matrix, get the number or rows and columns
--- @params m (Matrix) 
--- @return number - the number of rows in the matrix, number - the number of columns in the matrix
+-- @params Matrix m
+-- @return number - the number of rows in the matrix
+-- @return number - the number of columns in the matrix
 function getMatrixSize(m)
  local rows = m.length
  local columns = m[0].length
@@ -45,7 +47,8 @@ end
 
 
 -- @desc for a given row size and column size, create an empty matrix
--- @params rowSize (number) - number of rows, columnSize (number) - number of columns
+-- @params number rowSize - number of rows
+-- @params number columnSize - number of columns
 -- @returns Matrix
 function createEmptyMatrix(rowSize, columnSize)
  local matrix = {}
