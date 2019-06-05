@@ -1,7 +1,7 @@
 -- @desc print a matrix in human-readable form 
 -- @params Matrix m
 -- @return void
-function printMatrix(m) 
+function print_matrix(m) 
  -- opening bracket
  print('{')
 

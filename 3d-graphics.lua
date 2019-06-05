@@ -5,24 +5,24 @@
 -- @params Matrix m1
 -- @params Matrix m2
 -- @return Matrix
-function multiplyMatrices(m1, m2) 
+function multiply_matrices(m1, m2) 
  -- get dimensions of the two matrices
- local m1RowSize, m1ColumnSize = getMatrixSize(m1)
- local m2RowSize, m2ColumnSize = getMatrixSize(m2)
+ local m1_row_size, m1_column_size = get_matrix_size(m1)
+ local m2_row_size, m2_column_size = get_matrix_size(m2)
 
  -- TODO: removable
  -- error check
- if (m1RowSize != m2ColumnSize) error("Matrix sizes do not match")
+ if (m1_row_size != m2_column_size) error("Matrix sizes do not match")
 
  -- create the matrix that will be returned in the end
- local matrix = createEmptyMatrix(m2RowSize, m1ColumnSize)
+ local matrix = create_empty_matrix(m2_row_size, m1_column_size)
 
- for i = 1, m2RowSize do
-  for j = 1, m1ColumnSize do
+ for i = 1, m2_row_size do
+  for j = 1, m1_column_size do
    local sum = 0
 
-   -- m1RowSize is the same as m2ColumnSize so either can be used
-   for k = 1, m1RowSize do
+   -- m1_row_size is the same as m2_column_size so either can be used
+   for k = 1, m1_row_size do
     sum += m1[i][k] * m2[k][j]
    end
 
@@ -38,25 +38,25 @@ end
 -- @params Matrix m
 -- @return number - the number of rows in the matrix
 -- @return number - the number of columns in the matrix
-function getMatrixSize(m)
- local rows = m.length
- local columns = m[0].length
+function get_matrix_size(m)
+ local row_size = #m
+ local column_size = #m[1]
 
- return rows, columns
+ return row_size, column_size
 end
 
 
 -- @desc for a given row size and column size, create an empty matrix
--- @params number rowSize - number of rows
--- @params number columnSize - number of columns
+-- @params number row_size - number of rows
+-- @params number column_size - number of columns
 -- @returns Matrix
-function createEmptyMatrix(rowSize, columnSize)
+function create_empty_matrix(row_size, column_size)
  local matrix = {}
 
- for i = 1, rowSize do
+ for i = 1, row_size do
   local vector = {}
 
-  for j = 1, columnSize do
+  for j = 1, column_size do
    add(vector, 0)
   end
 
