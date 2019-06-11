@@ -1,68 +1,99 @@
--- Data types
--- Matrix - nested tables such that the inner tables are all the same size
+function _init()
+ near = 10
+ far = 1000
+ fov = 0.25
 
--- @desc multiply two matrices and return the resulting matrix
--- @params Matrix m1
--- @params Matrix m2
--- @return Matrix
-function multiply_matrices(m1, m2) 
- -- get dimensions of the two matrices
- local m1_row_size, m1_column_size = get_matrix_size(m1)
- local m2_row_size, m2_column_size = get_matrix_size(m2)
+ perspective_matrix = create_perspective_matrix()
 
- -- TODO: removable
- -- error check
- if (m1_column_size != m2_row_size) error("Matrix sizes do not match")
+ cube = {
+  -- SOUTH
+		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 0 }) },
+		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 40, 40, 0 }),    create_vector_matrix({ 40, 0, 0 }) },
 
- -- create the matrix that will be returned in the end
- local matrix = create_empty_matrix(m1_row_size, m2_column_size)
+		-- EAST                                                      
+		{ create_vector_matrix({ 40, 0, 0 }),    create_vector_matrix({ 40, 40, 0 }),    create_vector_matrix({ 40, 40, 40 }) },
+		{ create_vector_matrix({ 40, 0, 0 }),    create_vector_matrix({ 40, 40, 40 }),    create_vector_matrix({ 40, 0, 40 }) },
 
- -- cycle index of new matrix
- for m1_row_index = 1, m1_row_size do
-  for m2_column_index = 1, m2_column_size do
-   local sum = 0
+		-- NORTH                                                     
+		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 40, 40, 40 }),    create_vector_matrix({ 0, 40, 40 }) },
+		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 0, 40, 40 }),    create_vector_matrix({ 0, 0, 40 }) },
 
-   -- m1_row_size is the same as m2_column_size so either can be used
-   for row_column_index = 1, m1_column_size do
-    sum += m1[m1_row_index][row_column_index] * m2[row_column_index][m2_column_index]
-   end
+		-- WEST                                                      
+		{ create_vector_matrix({ 0, 0, 40 }),    create_vector_matrix({ 0, 40, 40 }),    create_vector_matrix({ 0, 40, 0 }) },
+		{ create_vector_matrix({ 0, 0, 40 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 0, 0, 0 }) },
 
-   matrix[m1_row_index][m2_column_index] = sum
-  end
+		-- TOP                                                       
+		{ create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 0, 40, 40 }),    create_vector_matrix({ 40, 40, 40 }) },
+		{ create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 40 }),    create_vector_matrix({ 40, 40, 0 }) },
+
+		-- BOTTOM                                                    
+		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 0, 0, 40 }),    create_vector_matrix({ 0, 0, 0 }) },
+		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 40, 0, 0 }) },
+ }
+
+ for triangle in all(cube) do
+  -- print_matrix(triangle[0]) 
+  -- print(triangle)
+
+  -- projected_triangle = multiply_matrices(perspective_matrix, triangle)
+  projected_triangle = {
+   homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[1])),
+   homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[2])),
+   homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[3]))
+  }
+
+  print_matrix(projected_triangle[1])
+
+  -- draw_triangle(projected_triangle)
  end
-
- return matrix
+ -- cls()
+ -- draw_triangle( {create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 0 })} )
 end
 
 
--- @desc for a given matrix, get the number or rows and columns
--- @params Matrix m
--- @return number - the number of rows in the matrix
--- @return number - the number of columns in the matrix
-function get_matrix_size(m)
- local row_size = #m
- local column_size = #m[1]
+-- function _draw()
+--  cls()
 
- return row_size, column_size
+--  for triangle in all(cube) do
+--   -- print_matrix(triangle[0]) 
+--   -- print(triangle)
+
+--   -- projected_triangle = multiply_matrices(perspective_matrix, triangle)
+--   projected_triangle = {
+--    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[1])),
+--    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[2])),
+--    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[3]))
+--   }
+
+--   draw_triangle(projected_triangle)
+--  end
+-- end
+
+
+function create_perspective_matrix()
+ local perspective_matrix = create_empty_matrix(4, 4)
+
+ local cotan_component = 1 / tan(fov / 2)
+
+ perspective_matrix[1][1] = cotan_component
+ perspective_matrix[2][2] = cotan_component
+ perspective_matrix[3][3] = (far + near) / (far - near)
+ perspective_matrix[3][4] = -1
+ perspective_matrix[4][3] = 2 * far * near / (far - near)
+
+ return perspective_matrix
 end
 
 
--- @desc for a given row size and column size, create an empty matrix
--- @params number row_size - number of rows
--- @params number column_size - number of columns
--- @returns Matrix
-function create_empty_matrix(row_size, column_size)
- local matrix = {}
+function tan(angle)
+ return sin(angle) / cos(angle)
+end
 
- for i = 1, row_size do
-  local vector = {}
 
-  for j = 1, column_size do
-   add(vector, 0)
-  end
+function draw_triangle(triangle)
+ color(8)
 
-  add(matrix, vector)
- end
-
- return matrix
+ line(triangle[1][1][1] * 128, triangle[1][2][1] * 128, triangle[2][1][1] * 128, triangle[2][2][1] * 128)
+ line(triangle[3][1][1] * 128, triangle[3][2][1] * 128)
+ line(triangle[1][1][1] * 128, triangle[1][2][1] * 128)
 end
