@@ -5,49 +5,51 @@ function _init()
 
  perspective_matrix = create_perspective_matrix()
 
- cube = {
-  -- SOUTH
-		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 0 }) },
-		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 40, 40, 0 }),    create_vector_matrix({ 40, 0, 0 }) },
+ print_matrix(perspective_matrix)
 
-		-- EAST                                                      
-		{ create_vector_matrix({ 40, 0, 0 }),    create_vector_matrix({ 40, 40, 0 }),    create_vector_matrix({ 40, 40, 40 }) },
-		{ create_vector_matrix({ 40, 0, 0 }),    create_vector_matrix({ 40, 40, 40 }),    create_vector_matrix({ 40, 0, 40 }) },
+--  cube = {
+--   -- SOUTH
+-- 		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 0, 1, 0 }),    create_vector_matrix({ 1, 1, 0 }) },
+-- 		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 1, 1, 0 }),    create_vector_matrix({ 1, 0, 0 }) },
 
-		-- NORTH                                                     
-		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 40, 40, 40 }),    create_vector_matrix({ 0, 40, 40 }) },
-		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 0, 40, 40 }),    create_vector_matrix({ 0, 0, 40 }) },
+-- 		-- EAST                                                      
+-- 		{ create_vector_matrix({ 1, 0, 0 }),    create_vector_matrix({ 1, 1, 0 }),    create_vector_matrix({ 1, 1, 1 }) },
+-- 		{ create_vector_matrix({ 1, 0, 0 }),    create_vector_matrix({ 1, 1, 1 }),    create_vector_matrix({ 1, 0, 1 }) },
 
-		-- WEST                                                      
-		{ create_vector_matrix({ 0, 0, 40 }),    create_vector_matrix({ 0, 40, 40 }),    create_vector_matrix({ 0, 40, 0 }) },
-		{ create_vector_matrix({ 0, 0, 40 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 0, 0, 0 }) },
+-- 		-- NORTH                                                     
+-- 		{ create_vector_matrix({ 1, 0, 1 }),    create_vector_matrix({ 1, 1, 1 }),    create_vector_matrix({ 0, 1, 1 }) },
+-- 		{ create_vector_matrix({ 1, 0, 1 }),    create_vector_matrix({ 0, 1, 1 }),    create_vector_matrix({ 0, 0, 1 }) },
 
-		-- TOP                                                       
-		{ create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 0, 40, 40 }),    create_vector_matrix({ 40, 40, 40 }) },
-		{ create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 40 }),    create_vector_matrix({ 40, 40, 0 }) },
+-- 		-- WEST                                                      
+-- 		{ create_vector_matrix({ 0, 0, 1 }),    create_vector_matrix({ 0, 1, 1 }),    create_vector_matrix({ 0, 1, 0 }) },
+-- 		{ create_vector_matrix({ 0, 0, 1 }),    create_vector_matrix({ 0, 1, 0 }),    create_vector_matrix({ 0, 0, 0 }) },
 
-		-- BOTTOM                                                    
-		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 0, 0, 40 }),    create_vector_matrix({ 0, 0, 0 }) },
-		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 40, 0, 0 }) },
- }
+-- 		-- TOP                                                       
+-- 		{ create_vector_matrix({ 0, 1, 0 }),    create_vector_matrix({ 0, 1, 1 }),    create_vector_matrix({ 1, 1, 1 }) },
+-- 		{ create_vector_matrix({ 0, 1, 0 }),    create_vector_matrix({ 1, 1, 1 }),    create_vector_matrix({ 1, 1, 0 }) },
 
- for triangle in all(cube) do
-  -- print_matrix(triangle[0]) 
-  -- print(triangle)
+-- 		-- BOTTOM                                                    
+-- 		{ create_vector_matrix({ 1, 0, 1 }),    create_vector_matrix({ 0, 0, 1 }),    create_vector_matrix({ 0, 0, 0 }) },
+-- 		{ create_vector_matrix({ 1, 0, 1 }),    create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 1, 0, 0 }) },
+--  }
 
-  -- projected_triangle = multiply_matrices(perspective_matrix, triangle)
-  projected_triangle = {
-   homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[1])),
-   homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[2])),
-   homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[3]))
-  }
+--  for triangle in all(cube) do
+--   -- print_matrix(triangle[0]) 
+--   -- print(triangle)
 
-  print_matrix(projected_triangle[1])
+--   -- projected_triangle = multiply_matrices(perspective_matrix, triangle)
+--   projected_triangle = {
+--    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[1])),
+--    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[2])),
+--    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[3]))
+--   }
 
-  -- draw_triangle(projected_triangle)
- end
- -- cls()
- -- draw_triangle( {create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 0 })} )
+--   print_matrix(projected_triangle[1])
+
+--   -- draw_triangle(projected_triangle)
+--  end
+--  -- cls()
+--  -- draw_triangle( {create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 0 })} )
 end
 
 
@@ -77,9 +79,9 @@ function create_perspective_matrix()
 
  perspective_matrix[1][1] = cotan_component
  perspective_matrix[2][2] = cotan_component
- perspective_matrix[3][3] = (far + near) / (far - near)
- perspective_matrix[3][4] = -1
- perspective_matrix[4][3] = 2 * far * near / (far - near)
+--  perspective_matrix[3][3] = (far + near) / (far - near)
+--  perspective_matrix[3][4] = -1
+--  perspective_matrix[4][3] = 2 * far * near / (far - near)
 
  return perspective_matrix
 end

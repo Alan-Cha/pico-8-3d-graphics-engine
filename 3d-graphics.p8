@@ -2,75 +2,55 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 function _init()
- near = 10
- far = 1000
- fov = 0.25
+ near = 0.1
+ far = 100
+
+ -- Pico-8 idiosyncracy
+ fov = -0.3
 
  perspective_matrix = create_perspective_matrix()
 
  cube = {
   -- SOUTH
-		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 0 }) },
-		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 40, 40, 0 }),    create_vector_matrix({ 40, 0, 0 }) },
+		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 0, 1, 0 }),    create_vector_matrix({ 1, 1, 0 }) },
+		{ create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 1, 1, 0 }),    create_vector_matrix({ 1, 0, 0 }) },
 
 		-- EAST                                                      
-		{ create_vector_matrix({ 40, 0, 0 }),    create_vector_matrix({ 40, 40, 0 }),    create_vector_matrix({ 40, 40, 40 }) },
-		{ create_vector_matrix({ 40, 0, 0 }),    create_vector_matrix({ 40, 40, 40 }),    create_vector_matrix({ 40, 0, 40 }) },
+		{ create_vector_matrix({ 1, 0, 0 }),    create_vector_matrix({ 1, 1, 0 }),    create_vector_matrix({ 1, 1, 1 }) },
+		{ create_vector_matrix({ 1, 0, 0 }),    create_vector_matrix({ 1, 1, 1 }),    create_vector_matrix({ 1, 0, 1 }) },
 
 		-- NORTH                                                     
-		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 40, 40, 40 }),    create_vector_matrix({ 0, 40, 40 }) },
-		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 0, 40, 40 }),    create_vector_matrix({ 0, 0, 40 }) },
+		{ create_vector_matrix({ 1, 0, 1 }),    create_vector_matrix({ 1, 1, 1 }),    create_vector_matrix({ 0, 1, 1 }) },
+		{ create_vector_matrix({ 1, 0, 1 }),    create_vector_matrix({ 0, 1, 1 }),    create_vector_matrix({ 0, 0, 1 }) },
 
 		-- WEST                                                      
-		{ create_vector_matrix({ 0, 0, 40 }),    create_vector_matrix({ 0, 40, 40 }),    create_vector_matrix({ 0, 40, 0 }) },
-		{ create_vector_matrix({ 0, 0, 40 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 0, 0, 0 }) },
+		{ create_vector_matrix({ 0, 0, 1 }),    create_vector_matrix({ 0, 1, 1 }),    create_vector_matrix({ 0, 1, 0 }) },
+		{ create_vector_matrix({ 0, 0, 1 }),    create_vector_matrix({ 0, 1, 0 }),    create_vector_matrix({ 0, 0, 0 }) },
 
 		-- TOP                                                       
-		{ create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 0, 40, 40 }),    create_vector_matrix({ 40, 40, 40 }) },
-		{ create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 40 }),    create_vector_matrix({ 40, 40, 0 }) },
+		{ create_vector_matrix({ 0, 1, 0 }),    create_vector_matrix({ 0, 1, 1 }),    create_vector_matrix({ 1, 1, 1 }) },
+		{ create_vector_matrix({ 0, 1, 0 }),    create_vector_matrix({ 1, 1, 1 }),    create_vector_matrix({ 1, 1, 0 }) },
 
 		-- BOTTOM                                                    
-		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 0, 0, 40 }),    create_vector_matrix({ 0, 0, 0 }) },
-		{ create_vector_matrix({ 40, 0, 40 }),    create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 40, 0, 0 }) },
+		{ create_vector_matrix({ 1, 0, 1 }),    create_vector_matrix({ 0, 0, 1 }),    create_vector_matrix({ 0, 0, 0 }) },
+		{ create_vector_matrix({ 1, 0, 1 }),    create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 1, 0, 0 }) },
  }
+end
+
+
+function _draw()
+ cls()
 
  for triangle in all(cube) do
-  -- print_matrix(triangle[0]) 
-  -- print(triangle)
-
-  -- projected_triangle = multiply_matrices(perspective_matrix, triangle)
   projected_triangle = {
    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[1])),
    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[2])),
    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[3]))
   }
 
-  print_matrix(projected_triangle[1])
-
-  -- draw_triangle(projected_triangle)
+  draw_triangle(projected_triangle)
  end
- -- cls()
- -- draw_triangle( {create_vector_matrix({ 0, 0, 0 }),    create_vector_matrix({ 0, 40, 0 }),    create_vector_matrix({ 40, 40, 0 })} )
 end
-
-
--- function _draw()
---  cls()
-
---  for triangle in all(cube) do
---   -- print_matrix(triangle[0]) 
---   -- print(triangle)
-
---   -- projected_triangle = multiply_matrices(perspective_matrix, triangle)
---   projected_triangle = {
---    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[1])),
---    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[2])),
---    homogenous_coordinate(multiply_matrices(perspective_matrix, triangle[3]))
---   }
-
---   draw_triangle(projected_triangle)
---  end
--- end
 
 
 function create_perspective_matrix()
@@ -80,14 +60,15 @@ function create_perspective_matrix()
 
  perspective_matrix[1][1] = cotan_component
  perspective_matrix[2][2] = cotan_component
- perspective_matrix[3][3] = (far + near) / (far - near)
- perspective_matrix[3][4] = -1
- perspective_matrix[4][3] = 2 * far * near / (far - near)
+ perspective_matrix[3][3] = (-near - far) / (near - far)
+ perspective_matrix[3][4] = (2 * far * near) / (near - far)
+ perspective_matrix[4][3] = 1
 
  return perspective_matrix
 end
 
 
+-- Helper function
 function tan(angle)
  return sin(angle) / cos(angle)
 end
@@ -96,10 +77,25 @@ end
 function draw_triangle(triangle)
  color(8)
 
- line(triangle[1][1][1] * 128, triangle[1][2][1] * 128, triangle[2][1][1] * 128, triangle[2][2][1] * 128)
- line(triangle[3][1][1] * 128, triangle[3][2][1] * 128)
- line(triangle[1][1][1] * 128, triangle[1][2][1] * 128)
+ scale = 64
+
+ position_triangle(triangle)
+
+ line(triangle[1][1][1] * scale, triangle[1][2][1] * scale, triangle[2][1][1] * scale, triangle[2][2][1] * scale)
+ line(triangle[3][1][1] * scale, triangle[3][2][1] * scale)
+ line(triangle[1][1][1] * scale, triangle[1][2][1] * scale)
 end
+
+
+function position_triangle(triangle)
+ for vector in all(triangle) do
+  -- Because we are working with a vector, we only need to access the first element
+  for coordinate in all(vector) do
+   coordinate[1] += 1
+  end
+ end
+end
+
 
 -- Data types
 -- Matrix - nested tables such that the inner tables are all the same size
@@ -193,6 +189,7 @@ function homogenous_coordinate(m)
 
  return m
 end
+
 
 -- @desc print a matrix in human-readable form 
 -- @params Matrix m
